@@ -1,19 +1,20 @@
 // @ts-check
-import { test, expect } from '@playwright/test';
+import { test, expect, request } from '@playwright/test';
 import { HomePage } from '../pages/homePage';
 import { log } from 'console';
 
-test('has title', async ({ page }) => {
-  // await page.goto('https://automationexercise.com/')
-  // // const response = await page.request.get('https://automationexercise.com/');
-  // await page.locator(`//a[normalize-space()='API Testing']`).click()
-  
-  // // expect(response.status()).toBe(200);
-  const homepage = new HomePage(page);
-  await homepage.navToHome()
- const list= await homepage.navToApiTesting()
- const li= await list.getAllApi()
- console.log(li);
- 
+test.describe('API documanetation',()=>{
+  test('Navigation to Home and APiTesting', async ({ page,request }) => {
+    const homepage = new HomePage(page);
+    await homepage.navToHome();
+    const apiPage = await homepage.navToApiTesting();
+    await apiPage.getApi()
+    const apiInfo = await apiPage.getapiDetails(0)
+    let response = await request.get(apiInfo.url);
+  // Validate Response
+  expect(response.status()).toBe(apiInfo.expectedStatus);
+
+   
 });
+})
 

@@ -1,35 +1,37 @@
-export class ApiTestingPage{
+export class ApiTestingPage {
     constructor(page) {
-        this.page = page
+        this.page = page;
+        this.api1 = page.locator(`//u[normalize-space(text())='API 1: Get All Products List']`);
     }
-    async getAllApi(){
-        const uElements = await this.page.locator('u').allTextContents();
 
-        const apiDetails = []
-
-  for (let elementText of uElements) {
-    const linkSelector = `//a[normalize-space()="${elementText}"]`;
-    await this.page.click(linkSelector);
-    await this.page.waitForTimeout(1000); 
-    const listItems = await this.page.locator('#collapse1 .list-group-item').allTextContents();
-            
-    const apiURL = listItems.find(item => item.includes('API URL:')).split(':')[1]?.trim();
-            const requestMethod = listItems.find(item => item.includes('Request Method:')).split(':')[1]?.trim();
-            const requestParameter = listItems.find(item => item.includes('Request Parameter:'))?.split(':')[1]?.trim();
-            const responseCode = listItems.find(item => item.includes('Response Code:')).split(':')[1]?.trim();
-            const responseMessage = listItems.find(item => item.includes('Response Message:'))?.split(':')[1]?.trim();
-            const responseJSON = listItems.find(item => item.includes('Response JSON:'))?.split(':')[1]?.trim();
-
-            apiDetails.push({
-                apiURL,
-                requestMethod,
-                requestParameter,
-                responseCode,
-                responseMessage,
-                responseJSON
-            });
-      
+    async getapiDetails(listNum) {
+        const apiDetails = await this.page.locator('ul.list-group').nth(listNum);
+        const apidetails = {};
+    
+        const listItems = await apiDetails.locator('li').all();
+        for (const li of listItems) {
+            const text = await li.innerText();
+    
+            if (text.includes("API URL:")) {
+                apidetails.url = await li.locator('a').getAttribute('href');
+            } else if (text.includes("Request Method:")) {
+                apidetails.method = text.split("Request Method:")[1].trim();
+            } else if (text.includes("Request Parameters:")) {
+                apidetails.requestParams = text.split("Request Parameters:")[1].trim().split(',').map(param => param.trim());
+            } else if (text.includes("Response Code:")) {
+                apidetails.expectedStatus = parseInt(text.split("Response Code:")[1].trim(), 10);
+            } else if (text.includes("Response Message:")) {
+                apidetails.expectedMessage = text.split("Response Message:")[1].trim();
+            } else if (text.includes("Response JSON:")) {
+                apidetails.validateResponse = text.split("Response JSON:")[1].trim();
+            }
+        }
+    
+        return apidetails;
     }
-    return apiDetails
-}
+
+    // Function to click and expand the specific API list
+    async getApi() {
+        await this.page.locator(this.api1)
+    }
 }
