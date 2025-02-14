@@ -2,6 +2,7 @@ export class ApiTestingPage {
     constructor(page) {
         this.page = page;
         this.api1 = page.locator(`//u[normalize-space(text())='API 1: Get All Products List']`);
+        this.api2=page.locator(`//u[normalize-space(text())='API 5: POST To Search Product']`)
     }
 
     async getapiDetails(listNum) {
@@ -31,7 +32,10 @@ export class ApiTestingPage {
     }
 
     // Function to click and expand the specific API list
-    async getApi() {
+    async getApi_get() {
         await this.page.locator(this.api1)
+    }
+    async getApi_Post(){
+        await this.page.locator(this.api2)
     }
 }
