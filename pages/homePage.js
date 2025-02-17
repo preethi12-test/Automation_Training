@@ -10,6 +10,8 @@ export class HomePage {
         this.featuredItem=page.locator(`.single-products`)
         this.emailSubsciptionBox=page.locator(`#susbscribe_email`)
         this.subscribeButton=page.locator(`#subscribe`)
+        this.mensCategori=page.locator(`//a[normalize-space()='Men']`)
+        this.tshirtSubCategori=page.locator(`//a[normalize-space()='Tshirts']`)
     }
     async navToHome()
     {
@@ -47,6 +49,10 @@ export class HomePage {
        const emailBox=await this.emailSubsciptionBox.isVisible()
        const subscribeBtn=await this.subscribeButton.isVisible()
        return {emailBox,subscribeBtn}
+    }
+    async navigateToMensCategories(){
+        await this.mensCategori.click()
+        await this.tshirtSubCategori.click()
     }
 
     

@@ -1,6 +1,5 @@
     import { test, expect, request } from '@playwright/test';
     import { HomePage } from '../pages/homePage';
-    import { log } from 'console';
 
     test.describe('Home Page Verification in Web',()=>{
         let homepage

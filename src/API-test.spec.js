@@ -1,7 +1,6 @@
 // @ts-check
 import { test, expect, request } from '@playwright/test';
 import { HomePage } from '../pages/homePage';
-import { log } from 'console';
 
 test.describe('API documanetation',()=>{
   test('Navigation to ApiTesting and validating get all product details', async ({ page,request }) => {
